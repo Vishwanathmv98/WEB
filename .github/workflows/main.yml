@@ -1,55 +1,30 @@
-name: Selenium Test Execution
+name: Python CI Workflow
 
-# This will run on any push to the repository
 on:
   push:
     branches:
-      - main  # Change to your desired branch, e.g., main or master
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  run-selenium-tests:
+  build:
     runs-on: ubuntu-latest
 
-    services:
-      # Set up a service for a browser, you can add browsers like Chromium
-      selenium:
-        image: selenium/standalone-chrome
-        options: --network-alias=selenium --shm-size 2g
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
 
-      - name: Run Tests
-        run: |
-          pytest --headless --testcase tests/ --alluredir=allure-results
-
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v2
-        with:
-          name: allure-results
-          path: allure-results
-
-      - name: Upload Screenshots
-        if: failure() # Only upload if there is a test failure
-        uses: actions/upload-artifact@v2
-        with:
-          name: failure-screenshots
-          path: screenshots
-
-      - name: Allure Report Generation
-        uses: actions/checkout@v2
-        run: |
-          pip install allure-pytest
-          allure generate allure-results --clean -o allure-report
-          allure open allure-report
+    - name: Run tests
+      run: |
+        pytest
