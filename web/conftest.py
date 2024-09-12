@@ -5,8 +5,6 @@ from selenium.webdriver.chrome.options import Options
 import allure
 import os
 from datetime import datetime
-
-# Configure logging
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -23,17 +21,31 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope='class')
 def web_driver(request):
-    # Set up Chrome options for headless mode if needed
     chrome_options = Options()
-    if request.config.getoption("--headless"):
+
+    # Check if running in a CI environment (like GitHub Actions)
+    if os.getenv('CI'):
+        logging.info("Running in CI environment - configuring WebDriver for CI")
         chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--window-size=1920x1080")
+        driver_path = "/usr/bin/chromedriver"  # Path to ChromeDriver in CI
+        chrome_options.binary_location = "/usr/bin/google-chrome"  # Path to Chrome binary in CI
+    else:
+        logging.info("Running locally - configuring WebDriver for local setup")
+        if request.config.getoption("--headless"):
+            chrome_options.add_argument("--headless")
+            chrome_options.add_argument("--disable-gpu")
+            chrome_options.add_argument("--window-size=1920x1080")
+        driver_path = 'C:\\chromedriver.exe'  # Local ChromeDriver path for Windows
 
     # Set up the Chrome WebDriver instance
-    service = Service('C:\\chromedriver.exe')
+    service = Service(driver_path)
     driver = webdriver.Chrome(service=service, options=chrome_options)
     driver.maximize_window()
+
     yield driver
     driver.quit()
 
