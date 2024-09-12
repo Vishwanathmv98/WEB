@@ -24,7 +24,6 @@ class TestGoogleSearch:
         allure.attach.file(screenshot_path, name=f"{test_name} Screenshot", attachment_type=allure.attachment_type.PNG)
         logging.info(f"Screenshot saved to {screenshot_path}")
 
-
     @pytest.mark.usefixtures("web_driver")
     def test_open_google(self, web_driver):
         driver = web_driver
