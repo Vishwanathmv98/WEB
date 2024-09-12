@@ -23,8 +23,8 @@ def web_driver(request):
     # Set headless mode based on environment (CI or local) and user option
     if os.getenv('CI'):  # In CI environment (like GitHub Actions)
         chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
+        # chrome_options.add_argument("--no-sandbox")
+        # chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.binary_location = "/usr/bin/google-chrome"  # Path to Chrome in CI
         driver_path = "/usr/bin/chromedriver"  # Path to ChromeDriver in CI
     else:  # Local environment
