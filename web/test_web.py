@@ -34,7 +34,7 @@ class TestGoogleSearch:
             logging.info("Opened Google Homepage")
 
             # Verify the title
-            assert "Googlee" in driver.title, "Google homepage title not found!"
+            assert "Google" in driver.title, "Google homepage title not found!"
             logging.info("Verified Google homepage title")
 
         except Exception as e:
