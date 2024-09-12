@@ -4,9 +4,10 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
 
+# Add --headless option to pytest
 def pytest_addoption(parser):
     parser.addoption(
-        "--headless", action="store_true", help="Run tests in headless mode"
+        "--headless", action="store_true", default=False, help="Run tests in headless mode"
     )
 
 
@@ -20,7 +21,7 @@ def web_driver(request):
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--window-size=1920x1080")
 
-    # Set the correct path for chromedriver on Ubuntu
+    # Set the correct path for chromedriver
     service = Service('/usr/local/bin/chromedriver')
 
     driver = webdriver.Chrome(service=service, options=chrome_options)
