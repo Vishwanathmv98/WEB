@@ -27,4 +27,4 @@ jobs:
           sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/local/bin/chromedriver
 
       - name: Run tests
-        run: pytest --headless --alluredir=./allure-results
+        run: pytest --alluredir=./allure-results
