@@ -15,8 +15,12 @@ jobs:
 
     - name: Remove GitHub extraheader
       run: |
-        git config --global --unset-all http.https://github.com/.extraheader
-        git submodule foreach --recursive 'git config --local --unset-all http.https://github.com/.extraheader'
+        set -x
+        if git config --global --get http.https://github.com/.extraheader; then
+          git config --global --unset-all http.https://github.com/.extraheader
+        fi
+        git submodule foreach --recursive 'if git config --local --get http.https://github.com/.extraheader; then git config --local --unset-all http.https://github.com/.extraheader; fi || true'
+        set +x
 
     - name: Set up Python
       uses: actions/setup-python@v3
