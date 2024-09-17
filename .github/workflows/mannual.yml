@@ -1,9 +1,7 @@
-name: CI Workflow
+name: Manual Trigger CI Workflow
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,15 +10,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-
-    - name: Remove GitHub extraheader
-      run: |
-        set -x
-        if git config --global --get http.https://github.com/.extraheader; then
-          git config --global --unset-all http.https://github.com/.extraheader
-        fi
-        git submodule foreach --recursive 'if git config --local --get http.https://github.com/.extraheader; then git config --local --unset-all http.https://github.com/.extraheader; fi || true'
-        set +x
 
     - name: Set up Python
       uses: actions/setup-python@v3
@@ -34,8 +23,3 @@ jobs:
     - name: Run tests with marker
       run: |
         pytest -m "basic_flows"
-
-    - name: Generate Allure report
-      run: |
-        allure serve allure-results
-
