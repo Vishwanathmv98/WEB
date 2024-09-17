@@ -2,7 +2,7 @@ name: Scheduled CI Workflow
 
 on:
   schedule:
-    - cron: '15 16 * * *'  # Runs daily at 4:15 PM UTC (which corresponds to 9:45 PM IST)
+    - cron: '35 16 * * *'  # Runs daily at 4:35 PM UTC (which corresponds to 10:05 PM IST)
 
 jobs:
   build:
@@ -25,7 +25,7 @@ jobs:
 
     - name: Run tests with marker
       run: |
-        pytest -m "basic_flows" --alluredir=allure-results  # Run tests with the 'basic_flows' marker
+        pytest -m "basic_flows"
 
     - name: Generate Allure report
       run: |
