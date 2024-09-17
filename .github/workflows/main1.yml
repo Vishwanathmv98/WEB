@@ -2,15 +2,16 @@ name: Scheduled CI Workflow
 
 on:
   schedule:
-    - cron: '45 17 * * *'  # Runs daily at 5:45 PM UTC (which corresponds to 11:15 PM IST)
+    - cron: '25 23 * * *'  # Runs daily at 11:25 PM UTC (which is 4:55 AM IST next day)
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        ref: main  # Ensure checking out the 'main' branch
 
     - name: Set up Python
       uses: actions/setup-python@v3
