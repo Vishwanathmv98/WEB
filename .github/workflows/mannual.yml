@@ -1,8 +1,7 @@
-name: Scheduled CI Workflow
+name: Manual Trigger CI Workflow
 
 on:
-  schedule:
-    - cron: '12 17 * * *'  # Runs daily at 5:12 PM UTC (which corresponds to 10:42 PM IST)
+  workflow_dispatch:
 
 jobs:
   build:
@@ -11,23 +10,22 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      with:
-        ref: main  # Ensures the checkout is from the main branch
 
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
         python-version: '3.11'
 
-    - name: Install Python dependencies
+    - name: Install dependencies
       run: |
         pip install -r requirements.txt
 
-    - name: Install Allure Command-Line Tool
+    - name: Install Allure Commandline
       run: |
-        wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.tgz
-        tar -xzf allure-commandline-2.15.0.tgz
-        sudo mv allure-2.15.0 /usr/local/bin/allure
+        sudo apt-get install -y unzip
+        wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.10/allure-commandline-2.13.10.zip
+        unzip allure-commandline-2.13.10.zip -d /opt/allure
+        sudo ln -s /opt/allure/allure-2.13.10/bin/allure /usr/bin/allure
 
     - name: Run tests with marker
       run: |
