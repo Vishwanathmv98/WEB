@@ -2,7 +2,7 @@ name: Scheduled CI Workflow
 
 on:
   schedule:
-    - cron: '35 16 * * *'  # Runs daily at 4:35 PM UTC (which corresponds to 10:05 PM IST)
+    - cron: '12 17 * * *'  # Runs daily at 5:12 PM UTC (which corresponds to 10:42 PM IST)
 
 jobs:
   build:
