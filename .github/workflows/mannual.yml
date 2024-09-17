@@ -1,7 +1,9 @@
-name: Manual Trigger CI Workflow
+name: CI Workflow
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -10,6 +12,11 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+
+    - name: Remove GitHub extraheader
+      run: |
+        git config --global --unset-all http.https://github.com/.extraheader
+        git submodule foreach --recursive 'git config --local --unset-all http.https://github.com/.extraheader'
 
     - name: Set up Python
       uses: actions/setup-python@v3
@@ -20,16 +27,9 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-    - name: Install Allure Commandline
-      run: |
-        sudo apt-get install -y unzip
-        wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.10/allure-commandline-2.13.10.zip
-        unzip allure-commandline-2.13.10.zip -d /opt/allure
-        sudo ln -s /opt/allure/allure-2.13.10/bin/allure /usr/bin/allure
-
     - name: Run tests with marker
       run: |
-        pytest -m "basic_flows" --alluredir=allure-results
+        pytest -m "basic_flows"
 
     - name: Generate Allure report
       run: |
