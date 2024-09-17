@@ -38,3 +38,4 @@ jobs:
     - name: Generate Allure report
       run: |
         allure serve allure-results
+
